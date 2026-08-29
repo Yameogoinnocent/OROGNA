@@ -1,0 +1,4 @@
+<?php
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+return new class extends Migration { public function up():void { $defaults=['hero_image'=>'images/team-orogna.jpg','about_image'=>'images/about.jpg','impact_image'=>'images/office.jpg','impact_title'=>'Des équipes qui font avancer les projets.','impact_text'=>'Une présence locale, une exigence de conseil et des solutions pensées pour produire un impact réel.','cta_image'=>'images/expertise.jpg']; foreach($defaults as $key=>$value){if(!DB::table('site_settings')->where('key',$key)->exists()) DB::table('site_settings')->insert(['key'=>$key,'value'=>$value,'type'=>'text','created_at'=>now(),'updated_at'=>now()]);}} public function down():void {DB::table('site_settings')->whereIn('key',['hero_image','about_image','impact_image','impact_title','impact_text','cta_image'])->delete();}};

@@ -1,0 +1,48 @@
+<?php
+namespace Database\Seeders;
+use App\Models\{Service,Training,Page,SiteSetting,JobOffer,GalleryAlbum};
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+class ContentSeeder extends Seeder {
+ public function run():void {
+  $services=[
+   ['Études et recherches','Analyse, études sectorielles et recherche appliquée pour éclairer vos décisions.','services/etudes.jpg','green'],
+   ['Acquisition de talents et renforcement des capacités','Identification des talents, développement des compétences et accompagnement des équipes.','services/talents.jpg','orange'],
+   ['Recrutement - Placement – Mobilité','Des solutions de recrutement structurées, de la définition du besoin à l’intégration.','services/recrutement.jpg','green'],
+   ['Externalisation de la paie','Sécurisez et simplifiez votre gestion de paie avec un accompagnement fiable.','services/paie.jpg','orange'],
+   ['Coaching - Évaluation – Incubation','Faites grandir les personnes, les projets et les organisations.','services/coaching.jpg','green'],
+   ['Conseils en organisation et transformation institutionnelle','Optimisation des processus, transformation institutionnelle et conduite du changement.','services/organisation.jpg','orange'],
+   ['Audit, Finance et Gestion','Diagnostic, contrôle, pilotage financier et amélioration de la performance.','services/audit-finance.jpg','green'],
+   ['Assistance juridique et institutionnelle','Un appui structuré pour vos enjeux juridiques et institutionnels.','services/juridique.jpg','orange'],
+   ['Solutions informatiques et transformation digitale','Des outils numériques pensés pour les usages, la donnée et la performance.','services/digital.jpg','green'],
+   ['Formation et développement des compétences','Des parcours pratiques, ciblés et directement utiles aux professionnels.','services/formation.jpg','orange'],
+   ['Location d’espaces','Des espaces professionnels pour travailler, former et organiser vos conférences.','services/espaces.jpg','green'],
+   ['Négoce international','Accompagnement des opérations de négoce, des partenariats et des échanges commerciaux internationaux.','services/commerce.jpg','orange'],
+   ['Conseil en Ressources Humaines','Conseil RH adapté aux enjeux de gestion, de développement et de performance des organisations.','services/rh.jpg','green'],
+   ['Externalisation des Ressources Humaines','Externalisation de fonctions RH pour gagner en efficacité, fiabilité et maîtrise des coûts.','services/rh-externalisation.jpg','orange'],
+   ['Centre de Bilan de Compétences','Évaluation et valorisation des compétences pour construire des parcours professionnels adaptés.','services/bilan.jpg','green'],
+   ['Accompagnement Stratégique des Entreprises','Appui stratégique aux entreprises pour structurer leurs décisions, leur croissance et leur transformation.','services/strategie.jpg','orange'],
+   ['La Base de données','Solutions de structuration, de gestion et d’exploitation des données pour mieux piloter vos activités.','services/base-donnees.jpg','green'],
+   ['Gestion de la Maintenance Assistée par Ordinateur (GMAO)','Solutions et accompagnement pour organiser, suivre et optimiser la maintenance des équipements.','services/gmao.jpg','orange'],
+   ['Formation des conducteurs automobiles','Formation et renforcement des compétences des conducteurs pour une conduite professionnelle et responsable.','services/conducteurs.jpg','green'],
+   ['Audit et Diagnostic Organisationnel','Diagnostic approfondi des organisations pour identifier les leviers d’amélioration et renforcer la performance.','services/diagnostic.jpg','orange'],
+  ];
+  Service::whereNotIn('slug', array_map(fn($s)=>Str::slug($s[0]), $services))->delete();
+  foreach($services as $i=>$s){Service::updateOrCreate(['slug'=>Str::slug($s[0])],['title'=>$s[0],'short_description'=>$s[1],'description'=>$s[1].' OROGNA Consulting adapte chaque intervention au contexte et aux objectifs de ses clients.','image'=>'images/'.$s[2],'accent'=>$s[3],'sort_order'=>$i+1,'is_active'=>true]);}
+  $trainings=[
+   ['Management opérationnel & leadership','Développer une posture de manager, animer une équipe et piloter la performance.','3 jours','Ouagadougou','Sur devis','2026-09-14'],
+   ['RH moderne : recrutement, évaluation & talents','Structurer un processus RH moderne et orienté compétences.','2 jours','Ouagadougou','Sur devis','2026-10-05'],
+   ['Transformation digitale des organisations','Passer de l’intention à une feuille de route digitale réaliste.','2 jours','Ouagadougou / Hybride','Sur devis','2026-11-09'],
+  ];
+  foreach($trainings as $t){Training::updateOrCreate(['slug'=>Str::slug($t[0])],['title'=>$t[0],'excerpt'=>$t[1],'description'=>$t[1].' Cette formation alterne apports, cas pratiques et outils directement réutilisables.','duration'=>$t[2],'location'=>$t[3],'price'=>$t[4],'start_date'=>$t[5],'is_published'=>true,'image'=>'images/team.jpg']);}
+  Page::updateOrCreate(['slug'=>'a-propos'],['title'=>'À propos d’OROGNA Consulting','excerpt'=>'Un cabinet pluridisciplinaire au service des organisations et des talents.','content'=>"OROGNA Consulting accompagne les entreprises, institutions et professionnels dans leurs enjeux de recrutement, de formation, de conseil, de gestion et de transformation.\n\nNotre approche combine expertise, proximité, exigence et compréhension des réalités du terrain. Nous construisons des solutions concrètes, adaptées à chaque organisation et orientées vers des résultats durables.",'is_published'=>true]);
+  $settings=[
+   'site_name'=>'OROGNA Consulting','tagline'=>'Le partenaire de vos talents, de votre organisation et de votre transformation.','phone'=>'+226 25 45 62 45','phone_secondary'=>'','email'=>'contact@orogna-consulting.com','address'=>'Ouagadougou, Burkina Faso','whatsapp'=>'70200070','facebook_url'=>'https://www.facebook.com/search/top?q=OROGNA%20Consulting','map_query'=>'OROGNA Consulting, Ouagadougou, Burkina Faso','hero_badge'=>'Conseil · Talents · Formation · Transformation','hero_title'=>'Révéler les talents.|Transformer les organisations.','hero_text'=>'OROGNA Consulting accompagne les entreprises, institutions et professionnels avec des solutions exigeantes, humaines et orientées résultats.','hero_cta'=>'Parler à un consultant','hero_secondary'=>'Explorer nos expertises','hero_image'=>'images/team-orogna.jpg','hero_video_url'=>'','hero_video_title'=>'Découvrez OROGNA Consulting','hero_video_text'=>'Notre approche, nos valeurs, notre engagement.','hero_video_poster'=>'images/team-orogna.jpg','about_image'=>'images/about.jpg','impact_image'=>'images/office.jpg','impact_title'=>'Des équipes qui font avancer les projets.','impact_text'=>'Une présence locale, une exigence de conseil et des solutions pensées pour produire un impact réel.','cta_image'=>'images/expertise.jpg','conviction_kicker'=>'Notre conviction','conviction_title'=>'Le bon conseil commence par une vraie compréhension du terrain.','conviction_text'=>'OROGNA Consulting ne se contente pas de proposer des prestations. Nous construisons des réponses utiles, mesurables et adaptées aux réalités de chaque organisation.','about_title'=>'Une vision humaine de la performance.','about_points'=>'Conseil de proximité|Solutions concrètes|Culture du résultat','cta_kicker'=>'Un besoin précis ?','cta_title'=>'Parlons de votre prochain projet.','cta_text'=>"Recrutement, organisation, formation ou transformation : notre équipe vous aide à passer de l’enjeu à l’action."
+  ];
+  foreach($settings as $k=>$v) SiteSetting::updateOrCreate(['key'=>$k],['value'=>$v,'type'=>'text']);
+  GalleryAlbum::updateOrCreate(['slug'=>'equipe-orogna'],['title'=>'Équipe OROGNA Consulting','description'=>'Découvrez l’équipe et l’identité humaine qui portent les projets OROGNA Consulting.','cover_image'=>'images/team-orogna.jpg','images'=>['images/team-orogna.jpg','images/team.jpg','images/office.jpg'],'is_published'=>true,'sort_order'=>1]);
+  GalleryAlbum::updateOrCreate(['slug'=>'nos-espaces'],['title'=>'Nos espaces & nos projets','description'=>'Quelques images de nos espaces de travail et de notre environnement professionnel.','cover_image'=>'images/office.jpg','images'=>['images/office.jpg','images/expertise.jpg','images/about.jpg'],'is_published'=>true,'sort_order'=>2]);
+  JobOffer::updateOrCreate(['reference'=>'ORO-RH-001'],['title'=>'Consultant(e) RH & Développement des Talents','sector'=>'Ressources humaines','location'=>'Ouagadougou','contract_type'=>'Temps plein','short_description'=>'Rejoignez une équipe qui transforme les enjeux RH en solutions concrètes.','description'=>'Piloter des missions de conseil RH, contribuer aux diagnostics et accompagner les clients dans leurs projets de développement des talents.','profile'=>'Formation supérieure en RH, management ou domaine connexe.','requirements'=>'Expérience conseil/RH, excellente communication, esprit analytique et sens du résultat.','published_at'=>now()->toDateString(),'deadline'=>now()->addMonths(2)->toDateString(),'is_published'=>true]);
+  JobOffer::updateOrCreate(['reference'=>'ORO-DIG-002'],['title'=>'Chargé(e) de projets digitaux','sector'=>'Transformation digitale','location'=>'Ouagadougou / Hybride','contract_type'=>'Mission','short_description'=>'Accompagnez nos clients dans leurs projets numériques.','description'=>'Coordonner des projets digitaux, formaliser les besoins, suivre les livrables et faciliter l’adoption des outils.','profile'=>'Formation en informatique, gestion de projet ou équivalent.','requirements'=>'Organisation, autonomie, culture produit et aisance avec les outils numériques.','published_at'=>now()->toDateString(),'deadline'=>now()->addMonths(2)->toDateString(),'is_published'=>true]);
+ }
+}

@@ -1,0 +1,80 @@
+@extends('layouts.app')
+@section('title','OROGNA Consulting — Conseil, talents, formation & transformation')
+@section('content')
+
+<section class="or-home-hero">
+    <img class="or-home-hero-bg" src="{{ asset(\App\Models\SiteSetting::value('hero_image','images/team-orogna.jpg')) }}" alt="L'équipe OROGNA Consulting">
+    <div class="or-home-hero-overlay"></div>
+    <div class="or-home-hero-glow"></div>
+    <div class="container-pro or-home-hero-content">
+        <div class="or-home-copy reveal">
+            <div class="or-kicker or-kicker-light">{{ \App\Models\SiteSetting::value('hero_badge','Conseil · Talents · Formation · Transformation') }}</div>
+            @php($heroTitle = \App\Models\SiteSetting::value('hero_title','Révéler les talents.|Transformer les organisations.'))
+            @php($heroParts = array_pad(explode('|',$heroTitle,2),2,''))
+            <h1>{{ trim($heroParts[0]) }}@if(trim($heroParts[1] ?? ''))<br><span>{{ trim($heroParts[1]) }}</span>@endif</h1>
+            <p>{{ \App\Models\SiteSetting::value('hero_text','OROGNA Consulting accompagne les entreprises, institutions et professionnels avec des solutions exigeantes, humaines et orientées résultats.') }}</p>
+            <div class="or-actions">
+                <a href="{{ route('contact') }}" class="or-btn or-btn-orange">{{ \App\Models\SiteSetting::value('hero_cta','Parler à un consultant') }} <span>↗</span></a>
+                <a href="#expertises" class="or-btn or-btn-ghost">{{ \App\Models\SiteSetting::value('hero_secondary','Découvrir nos expertises') }} <span>↓</span></a>
+            </div>
+            <div class="or-trust-line"><span>Cabinet pluridisciplinaire</span><i></i><span>Ouagadougou · Burkina Faso</span><i></i><span>Solutions sur mesure</span></div>
+        </div>
+        <div class="or-home-video-card reveal">
+            <div class="or-video-shell">
+                @php($videoUrl = trim((string) \App\Models\SiteSetting::value('hero_video_url','')))
+                @php($videoPoster = \App\Models\SiteSetting::value('hero_video_poster','images/team-orogna.jpg'))
+                @if($videoUrl)
+                    @php($embedUrl = $videoUrl)
+                    @if(str_contains($videoUrl,'youtube.com/watch'))
+                        @php(parse_str(parse_url($videoUrl, PHP_URL_QUERY) ?: '', $ytQuery))
+                        @php($embedUrl = !empty($ytQuery['v']) ? 'https://www.youtube.com/embed/'.$ytQuery['v'] : $videoUrl)
+                    @elseif(str_contains($videoUrl,'youtu.be/'))
+                        @php($embedUrl = 'https://www.youtube.com/embed/'.trim(parse_url($videoUrl, PHP_URL_PATH),'/'))
+                    @elseif(str_contains($videoUrl,'vimeo.com/') && !str_contains($videoUrl,'player.vimeo.com'))
+                        @php($embedUrl = 'https://player.vimeo.com/video/'.trim(parse_url($videoUrl, PHP_URL_PATH),'/'))
+                    @endif
+                    @php($isEmbed = str_contains($embedUrl,'youtube.com/embed/') || str_contains($embedUrl,'player.vimeo.com/video/'))
+                    @if($isEmbed)
+                        <iframe src="{{ $embedUrl }}" title="OROGNA Consulting" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                    @else
+                        <video controls preload="metadata" poster="{{ asset($videoPoster) }}"><source src="{{ $videoUrl }}"></video>
+                    @endif
+                @else
+                    <img src="{{ asset($videoPoster) }}" alt="Présentation OROGNA Consulting">
+                    <div class="or-video-placeholder">
+                        <div class="or-play">▶</div>
+                        <strong>{{ \App\Models\SiteSetting::value('hero_video_title','Découvrez OROGNA Consulting') }}</strong>
+                        <span>{{ \App\Models\SiteSetting::value('hero_video_text','Notre approche, nos valeurs, notre engagement.') }}</span>
+                        <small>Ajoutez votre vidéo depuis Administration → Page d’accueil</small>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="container-pro or-home-stats">
+        <div><span class="or-stat-icon">◎</span><strong>360°</strong><small>Accompagnement</small><p>Une approche complète et sur mesure</p></div>
+        <div><span class="or-stat-icon">✦</span><strong>20+</strong><small>Expertises actives</small><p>Des compétences pointues à votre service</p></div>
+        <div><span class="or-stat-icon">◉</span><strong>RH</strong><small>Talents & organisations</small><p>Au cœur de la performance durable</p></div>
+        <div><span class="or-stat-icon">⌖</span><strong>BF</strong><small>Ancrage au Burkina Faso</small><p>Une connaissance fine du terrain</p></div>
+        <div><span class="or-stat-icon">◌</span><strong>24/7</strong><small>Accès aux opportunités</small><p>Des offres et ressources en continu</p></div>
+    </div>
+</section>
+
+@if(\App\Models\SiteSetting::value('section_marquee','1') !== '0')<section class="or-marquee" aria-label="Domaines d'intervention"><div class="or-marquee-track"><span>Conseil stratégique</span><b>•</b><span>Acquisition de talents</span><b>•</b><span>Formation</span><b>•</b><span>Transformation digitale</span><b>•</b><span>Organisation</span><b>•</b><span>Audit & gestion</span><b>•</b><span>Conseil stratégique</span><b>•</b><span>Acquisition de talents</span><b>•</b><span>Formation</span><b>•</b><span>Transformation digitale</span></div></section>@endif
+
+@if(\App\Models\SiteSetting::value('section_conviction','1') !== '0')<section class="or-intro-section"><div class="container-pro or-intro-grid"><div class="reveal"><div class="or-kicker">{{ \App\Models\SiteSetting::value('conviction_kicker','Notre conviction') }}</div><h2>{{ \App\Models\SiteSetting::value('conviction_title','Le bon conseil commence par une vraie compréhension du terrain.') }}</h2></div><div class="reveal"><p class="or-lead">{{ \App\Models\SiteSetting::value('conviction_text','OROGNA Consulting ne se contente pas de proposer des prestations. Nous construisons des réponses utiles, mesurables et adaptées aux réalités de chaque organisation.') }}</p><div class="or-principles"><div><span>01</span><strong>Proximité</strong><p>Une écoute attentive et une compréhension fine de vos enjeux.</p></div><div><span>02</span><strong>Résultats</strong><p>Des livrables concrets et une approche orientée impact.</p></div><div><span>03</span><strong>Exigence</strong><p>Des méthodes rigoureuses, avec un regard pragmatique.</p></div></div></div></div></section>@endif
+
+@if(\App\Models\SiteSetting::value('section_expertises','1') !== '0')<section id="expertises" class="or-expertise-section"><div class="container-pro"><div class="or-section-head reveal"><div><div class="or-kicker">Nos expertises</div><h2>Un écosystème de compétences<br><em>pour agir.</em></h2></div><a href="{{ route('services') }}" class="or-link">Voir les 11 expertises <span>↗</span></a></div><div class="or-expertise-grid">@foreach($services->take(6) as $i => $service)<article class="or-expertise-card reveal {{ $i===0 ? 'or-expertise-featured':'' }}"><div class="or-card-top"><span class="or-index">{{ str_pad($i+1,2,'0',STR_PAD_LEFT) }}</span><span class="or-card-icon">{{ $service->icon ?? '✦' }}</span></div><div class="or-card-content"><h3>{{ $service->title }}</h3><p>{{ $service->short_description }}</p><a href="{{ route('services') }}">Explorer <span>↗</span></a></div></article>@endforeach</div><div class="or-expertise-bottom reveal"><span>+ 5 autres domaines : audit, finance, juridique, informatique, formation & location d'espaces.</span><a href="{{ route('services') }}">Découvrir l'ensemble du portefeuille →</a></div></div></section>@endif
+
+@if(\App\Models\SiteSetting::value('section_about','1') !== '0')<section class="or-about-section"><div class="container-pro or-about-grid"><div class="or-about-photo reveal"><img src="{{ asset(\App\Models\SiteSetting::value('about_image','images/about.jpg')) }}" alt="L'équipe OROGNA Consulting"><div class="or-about-badge"><strong>OROGNA</strong><span>Le partenaire de vos talents.</span></div></div><div class="reveal or-about-copy"><div class="or-kicker">À propos</div><h2>{{ \App\Models\SiteSetting::value('about_title','Une vision humaine de la performance.') }}</h2><p class="or-lead">{{ $about?->excerpt ?? 'Un cabinet pluridisciplinaire au service des organisations et des talents.' }}</p><p class="or-body">{{ \Illuminate\Support\Str::limit(str_replace("\n", ' ', $about?->content ?? ''), 520) }}</p><div class="or-about-points">@foreach(explode('|', \App\Models\SiteSetting::value('about_points','Conseil de proximité|Solutions concrètes|Culture du résultat')) as $point)<span>✓ {{ trim($point) }}</span>@endforeach</div><a href="{{ route('about') }}" class="or-link">Découvrir OROGNA Consulting <span>↗</span></a></div></div></section>@endif
+
+@if(\App\Models\SiteSetting::value('section_impact','1') !== '0')<section class="or-impact-section"><div class="container-pro or-impact-grid"><div class="or-impact-media reveal"><img src="{{ asset(\App\Models\SiteSetting::value('impact_image','images/office.jpg')) }}" alt="OROGNA Consulting — environnement de travail" loading="lazy"><div class="or-impact-label"><span>OROGNA</span><strong>Terrain · Expertise · Impact</strong></div></div><div class="reveal or-impact-copy"><div class="or-kicker">Notre signature</div><h2>{{ \App\Models\SiteSetting::value('impact_title','Des équipes qui font avancer les projets.') }}</h2><p>{{ \App\Models\SiteSetting::value('impact_text','Une présence locale, une exigence de conseil et des solutions pensées pour produire un impact réel.') }}</p><div class="or-impact-list"><div><b>01</b><span>Comprendre avant de recommander.</span></div><div><b>02</b><span>Construire des solutions utiles.</span></div><div><b>03</b><span>Mesurer ce qui change vraiment.</span></div></div><a href="{{ route('contact') }}" class="or-btn or-btn-green">Échanger avec OROGNA <span>↗</span></a></div></div></section>@endif
+
+@if(\App\Models\SiteSetting::value('section_careers','1') !== '0')<section class="or-careers-section"><div class="container-pro"><div class="or-section-head reveal"><div><div class="or-kicker">Carrières</div><h2>Les talents font<br><em>la différence.</em></h2></div><a href="{{ route('jobs') }}" class="or-link">Toutes les opportunités <span>↗</span></a></div><div class="or-careers-grid">@forelse($jobs as $job)<a href="{{ route('jobs.show',$job) }}" class="or-job-card reveal"><div class="or-job-meta"><span>{{ $job->contract_type ?: 'Opportunité' }}</span><span>{{ $job->location }}</span></div><div><small>{{ $job->sector }}</small><h3>{{ $job->title }}</h3><p>{{ $job->short_description }}</p></div><span class="or-circle-arrow">↗</span></a>@empty<div class="or-empty">Aucune offre publiée pour le moment.</div>@endforelse<a href="{{ route('apply') }}" class="or-spontaneous-card reveal"><span class="or-kicker">Candidature spontanée</span><h3>Votre prochain chapitre peut commencer ici.</h3><p>Envoyez votre CV et présentez-nous votre projet professionnel.</p><span class="or-link">Déposer mon CV <b>↗</b></span></a></div></div></section>@endif
+
+@if(\App\Models\SiteSetting::value('section_trainings','1') !== '0')<section class="or-training-section"><div class="container-pro"><div class="or-section-head reveal"><div><div class="or-kicker">Formations</div><h2>Apprendre. Pratiquer.<br><em>Progresser.</em></h2></div><a href="{{ route('trainings.index') }}" class="or-link">Voir le catalogue <span>↗</span></a></div><div class="or-training-grid">@foreach($trainings as $training)<article class="or-training-card reveal"><div class="or-training-image"><img src="{{ asset($training->image ?: 'images/team-orogna.jpg') }}" alt="{{ $training->title }}"><span>{{ $training->duration }}</span></div><div class="or-training-body"><small>{{ optional($training->start_date)->translatedFormat('d M Y') }} · {{ $training->location }}</small><h3>{{ $training->title }}</h3><p>{{ $training->excerpt }}</p><a href="{{ route('trainings.show',$training) }}">Découvrir la formation <span>→</span></a></div></article>@endforeach</div></div></section>@endif
+
+<section class="or-map-section or-home-map-section"><div class="container-pro"><div class="or-map-head"><div><div class="or-kicker">Notre localisation</div><h2>Retrouvez <em>OROGNA</em> à Ouagadougou.</h2><p>Notre localisation est directement visible depuis la page d’accueil. Utilisez Google Maps pour préparer votre itinéraire.</p></div><a class="or-btn or-btn-orange" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query={{ urlencode(\App\Models\SiteSetting::value('map_query',\App\Models\SiteSetting::value('address','Ouagadougou, Burkina Faso'))) }}">Ouvrir Google Maps ↗</a></div><div class="or-map-card">@if(config('services.google_maps.key'))<div id="orogna-home-google-map" data-address="{{ \App\Models\SiteSetting::value('map_query',\App\Models\SiteSetting::value('address','Ouagadougou, Burkina Faso')) }}"></div><script>window.initOrognaHomeMap=function(){const el=document.getElementById('orogna-home-google-map');if(!el)return;const map=new google.maps.Map(el,{zoom:15,center:{lat:12.3714,lng:-1.5197},mapTypeControl:false,streetViewControl:false,fullscreenControl:true});const geocoder=new google.maps.Geocoder();geocoder.geocode({address:el.dataset.address},(results,status)=>{if(status==='OK'&&results[0]){map.setCenter(results[0].geometry.location);new google.maps.Marker({map,position:results[0].geometry.location,title:'OROGNA Consulting'});}});};</script><script async defer src="https://maps.googleapis.com/maps/api/js?key={{ urlencode(config('services.google_maps.key')) }}&callback=initOrognaHomeMap"></script>@else<iframe title="Localisation OROGNA Consulting sur Google Maps" src="https://www.google.com/maps?q={{ urlencode(\App\Models\SiteSetting::value('map_query',\App\Models\SiteSetting::value('address','Ouagadougou, Burkina Faso'))) }}&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>@endif</div></div></section>
+
+@if(\App\Models\SiteSetting::value('section_cta','1') !== '0')<section class="or-cta-section" style="--or-cta-bg:url('{{ asset(\App\Models\SiteSetting::value('cta_image','images/expertise.jpg')) }}')"><div class="or-cta-inner container-pro"><div class="or-cta-mark">O</div><div class="reveal"><div class="or-kicker or-kicker-light">{{ \App\Models\SiteSetting::value('cta_kicker','Un besoin précis ?') }}</div><h2>{{ \App\Models\SiteSetting::value('cta_title','Parlons de votre prochain projet.') }}</h2><p>{{ \App\Models\SiteSetting::value('cta_text',"Recrutement, organisation, formation ou transformation : notre équipe vous aide à passer de l’enjeu à l’action.") }}</p></div><div class="or-cta-actions reveal"><a href="{{ route('contact') }}" class="or-btn or-btn-orange">Nous contacter ↗</a><a href="{{ route('apply') }}" class="or-btn or-btn-ghost">Déposer mon CV</a></div></div></section>@endif
+@endsection

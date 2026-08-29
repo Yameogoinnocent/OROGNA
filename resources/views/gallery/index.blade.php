@@ -1,0 +1,6 @@
+@extends('layouts.app')
+@section('title','Galerie — OROGNA Consulting')
+@section('content')
+<section class="gallery-hero"><div class="gallery-hero-glow"></div><div class="container-pro"><span class="or-kicker or-kicker-light">Vie d’OROGNA</span><h1>Nos équipes, nos moments,<br><em>nos projets.</em></h1><p>Découvrez les différents univers d’OROGNA Consulting à travers nos albums photos.</p></div></section>
+<section class="gallery-section"><div class="container-pro">@if($albums->count())<div class="gallery-grid">@foreach($albums as $album)<a href="{{ route('gallery.show',$album) }}" class="gallery-card"><div class="gallery-card-media"><img src="{{ asset($album->cover_image ?: ($album->images[0] ?? 'images/team-orogna.jpg')) }}" alt="{{ $album->title }}"><div class="gallery-card-overlay"></div><div class="gallery-card-meta"><span>{{ count($album->images ?: []) }} photos</span><b>Voir l’album ↗</b></div></div><div class="gallery-card-body"><h2>{{ $album->title }}</h2><p>{{ $album->description }}</p></div></a>@endforeach</div>@else<div class="gallery-empty"><div>▧</div><h2>La galerie arrive bientôt</h2><p>Les albums photos d’OROGNA Consulting seront publiés ici.</p></div>@endif</div></section>
+@endsection
