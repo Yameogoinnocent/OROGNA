@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PageRequest;
 use App\Models\Page;
 use App\Traits\HandlesImageUploads;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class PageController extends Controller
@@ -18,15 +18,9 @@ class PageController extends Controller
         return view('admin.content.pages', compact('items'));
     }
 
-    public function store(Request $request)
+    public function store(PageRequest $request)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:180',
-            'slug' => 'nullable|string|max:180',
-            'excerpt' => 'nullable|string|max:500',
-            'content' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:12288',
-        ]);
+        $data = $request->validated();
 
         $slug = Str::slug($data['slug'] ?? $data['title']);
         if (Page::where('slug', $slug)->exists()) {
@@ -45,14 +39,9 @@ class PageController extends Controller
         return back()->with('success', 'Page créée : ' . $page->title);
     }
 
-    public function update(Request $request, Page $page)
+    public function update(PageRequest $request, Page $page)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:180',
-            'excerpt' => 'nullable|string|max:500',
-            'content' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:12288',
-        ]);
+        $data = $request->validated();
 
         $page->update([
             'title' => $data['title'],

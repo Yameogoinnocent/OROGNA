@@ -9,8 +9,21 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::orderByDesc('created_at')->paginate(20);
-        return view('admin.users.index', compact('users'));
+        $q = request('q');
+        $role = request('role');
+
+        $users = User::when($q, function ($query) use ($q) {
+            $query->where(function ($w) use ($q) {
+                $w->where('name', 'like', '%' . $q . '%')
+                    ->orWhere('email', 'like', '%' . $q . '%');
+            });
+        })
+        ->when($role, fn($query) => $query->where('role', $role))
+        ->orderByDesc('created_at')
+        ->paginate(20)
+        ->withQueryString();
+
+        return view('admin.users.index', compact('users', 'q', 'role'));
     }
 
     public function toggle(User $user)

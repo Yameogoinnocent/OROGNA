@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ApplicationStatusRequest;
 use App\Models\Application;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ApplicationController extends Controller
@@ -32,12 +32,9 @@ class ApplicationController extends Controller
         return view('admin.applications.index', compact('items', 'q', 'status'));
     }
 
-    public function updateStatus(Request $request, Application $application)
+    public function updateStatus(ApplicationStatusRequest $request, Application $application)
     {
-        $data = $request->validate([
-            'status' => 'required|in:nouvelle,en_etude,entretien,retenue,rejetee',
-            'admin_notes' => 'nullable|string|max:10000',
-        ]);
+        $data = $request->validated();
 
         $application->update($data);
 

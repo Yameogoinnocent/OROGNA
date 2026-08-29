@@ -3,17 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\MessageReplyRequest;
 use App\Models\ContactMessage;
 use App\Models\SiteSetting;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class MessageController extends Controller
 {
     public function index()
     {
-        $items = ContactMessage::latest()->paginate(15);
-        return view('admin.messages.index', compact('items'));
+        $q = request('q');
+        $status = request('status');
+
+        $items = ContactMessage::when($q, function ($query) use ($q) {
+            $query->where(function ($w) use ($q) {
+                $w->where('name', 'like', '%' . $q . '%')
+                    ->orWhere('email', 'like', '%' . $q . '%')
+                    ->orWhere('subject', 'like', '%' . $q . '%')
+                    ->orWhere('message', 'like', '%' . $q . '%');
+            });
+        })
+        ->when($status === 'unread', fn($query) => $query->where('is_read', false))
+        ->when($status === 'read', fn($query) => $query->where('is_read', true))
+        ->latest()
+        ->paginate(15)
+        ->withQueryString();
+
+        return view('admin.messages.index', compact('items', 'q', 'status'));
     }
 
     public function markAsRead(ContactMessage $message)
@@ -22,11 +38,9 @@ class MessageController extends Controller
         return back();
     }
 
-    public function reply(Request $request, ContactMessage $message)
+    public function reply(MessageReplyRequest $request, ContactMessage $message)
     {
-        $data = $request->validate([
-            'reply' => 'required|string|max:10000',
-        ]);
+        $data = $request->validated();
 
         $subject = $message->subject
             ? 'Re: ' . $message->subject

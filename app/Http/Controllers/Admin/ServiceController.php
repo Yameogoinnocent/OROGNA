@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ServiceRequest;
 use App\Models\Service;
 use App\Traits\HandlesImageUploads;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ServiceController extends Controller
@@ -18,18 +18,9 @@ class ServiceController extends Controller
         return view('admin.content.services', compact('items'));
     }
 
-    public function store(Request $request)
+    public function store(ServiceRequest $request)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:180',
-            'short_description' => 'required|string|max:500',
-            'description' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
-            'image_upload' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:12288',
-            'accent' => 'required|in:green,orange',
-            'sort_order' => 'required|integer|min:0',
-            'is_active' => 'nullable',
-        ]);
+        $data = $request->validated();
 
         $data['image'] = $this->storeImage($request, 'image_upload', 'services', $data['image'] ?? null);
 
@@ -47,17 +38,9 @@ class ServiceController extends Controller
         return back()->with('success', 'Expertise ajoutée.');
     }
 
-    public function update(Request $request, Service $service)
+    public function update(ServiceRequest $request, Service $service)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:180',
-            'short_description' => 'required|string|max:500',
-            'description' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
-            'image_upload' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:12288',
-            'accent' => 'required|in:green,orange',
-            'sort_order' => 'required|integer|min:0',
-        ]);
+        $data = $request->validated();
 
         $oldImage = $service->image;
         $data['image'] = $this->storeImage($request, 'image_upload', 'services', $data['image'] ?? $service->image);

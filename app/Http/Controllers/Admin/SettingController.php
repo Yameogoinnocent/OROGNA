@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\SettingRequest;
 use App\Models\SiteSetting;
 use App\Traits\HandlesImageUploads;
-use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
@@ -17,15 +17,13 @@ class SettingController extends Controller
         return view('admin.content.settings', compact('settings'));
     }
 
-    public function update(Request $request)
+    public function update(SettingRequest $request)
     {
-        $request->validate([
-            'logo_upload' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:12288',
-            'favicon_upload' => 'nullable|image|mimes:jpg,jpeg,png,webp,ico|max:4096',
-        ]);
+        $request->validated();
 
         foreach ($request->input('settings', []) as $key => $value) {
             SiteSetting::updateOrCreate(['key' => $key], ['value' => $value, 'type' => 'text']);
+            SiteSetting::clearCache($key);
         }
 
         $imageFields = [
@@ -36,6 +34,7 @@ class SettingController extends Controller
         foreach ($imageFields as [$key, $field]) {
             if ($path = $this->storeImage($request, $field, 'brand', SiteSetting::value($key))) {
                 SiteSetting::updateOrCreate(['key' => $key], ['value' => $path, 'type' => 'image']);
+                SiteSetting::clearCache($key);
             }
         }
 

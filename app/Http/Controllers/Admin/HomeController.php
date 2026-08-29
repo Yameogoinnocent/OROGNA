@@ -37,6 +37,7 @@ class HomeController extends Controller
 
         foreach ($data['settings'] ?? [] as $key => $value) {
             SiteSetting::updateOrCreate(['key' => $key], ['value' => $value, 'type' => 'text']);
+            SiteSetting::clearCache($key);
         }
 
         $imageFields = [
@@ -50,6 +51,7 @@ class HomeController extends Controller
         foreach ($imageFields as [$key, $field, $folder]) {
             if ($path = $this->storeImage($request, $field, $folder, SiteSetting::value($key))) {
                 SiteSetting::updateOrCreate(['key' => $key], ['value' => $path, 'type' => 'image']);
+                SiteSetting::clearCache($key);
             }
         }
 
