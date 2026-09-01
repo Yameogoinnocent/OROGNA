@@ -1,6 +1,65 @@
 @extends('layouts.app')
 @section('title',$jobOffer->title.' — OROGNA Consulting')
+@section('meta_description',$jobOffer->short_description ?: Str::limit(strip_tags($jobOffer->description), 160))
 @section('content')
-<section class="hero-grid py-24 text-white"><div class="container-pro"><span class="eyebrow text-orange-300">{{ $jobOffer->sector ?: 'Opportunité' }}</span><h1 class="font-display mt-5 max-w-4xl text-5xl font-extrabold sm:text-6xl">{{ $jobOffer->title }}</h1><div class="mt-7 flex flex-wrap gap-3 text-sm font-bold"><span class="rounded-full bg-white/10 px-4 py-2">{{ $jobOffer->location }}</span><span class="rounded-full bg-white/10 px-4 py-2">{{ $jobOffer->contract_type }}</span><span class="rounded-full bg-white/10 px-4 py-2">Réf. {{ $jobOffer->reference }}</span></div></div></section>
-<section class="bg-white py-20"><div class="container-pro grid gap-12 lg:grid-cols-[1fr_360px]"><article class="prose prose-lg max-w-none text-slate-600"><h2>Description</h2><p class="whitespace-pre-line">{{ $jobOffer->description }}</p><h2>Profil recherché</h2><p class="whitespace-pre-line">{{ $jobOffer->profile }}</p><h2>Compétences & exigences</h2><p class="whitespace-pre-line">{{ $jobOffer->requirements }}</p></article><aside class="h-fit rounded-[30px] bg-[#f4f7f2] p-7 lg:sticky lg:top-28"><div class="text-xs font-black uppercase tracking-wider text-orange-500">Prêt à candidater ?</div><h2 class="mt-3 text-2xl font-extrabold">Rejoignez l'aventure OROGNA.</h2><p class="mt-3 text-sm leading-6 text-slate-500">CV et lettre de motivation en quelques étapes.</p><a class="btn-primary mt-7 w-full justify-center" href="{{ route('apply',$jobOffer) }}">Postuler à cette offre ↗</a></aside></div></section>
+<section class="hero-grid py-24 text-white">
+  <div class="container-pro">
+    <span class="eyebrow text-orange-300">{{ $jobOffer->sector ?: 'Opportunité' }}</span>
+    <h1 class="font-display mt-5 max-w-4xl text-5xl font-extrabold sm:text-6xl">{{ $jobOffer->title }}</h1>
+    <div class="mt-7 flex flex-wrap gap-3 text-sm font-bold">
+      <span class="rounded-full bg-white/10 px-4 py-2">{{ $jobOffer->location }}</span>
+      <span class="rounded-full bg-white/10 px-4 py-2">{{ $jobOffer->contract_type }}</span>
+      <span class="rounded-full bg-white/10 px-4 py-2">Réf. {{ $jobOffer->reference }}</span>
+    </div>
+  </div>
+</section>
+
+<section class="bg-white py-20">
+  <div class="container-pro grid gap-12 lg:grid-cols-[1fr_360px]">
+    <article class="prose prose-lg max-w-none text-slate-600">
+      <h2>Description</h2>
+      <p class="whitespace-pre-line">{{ $jobOffer->description }}</p>
+      <h2>Profil recherché</h2>
+      <p class="whitespace-pre-line">{{ $jobOffer->profile }}</p>
+      <h2>Compétences & exigences</h2>
+      <p class="whitespace-pre-line">{{ $jobOffer->requirements }}</p>
+    </article>
+    <aside class="h-fit rounded-[30px] bg-[#f4f7f2] p-7 lg:sticky lg:top-28">
+      <div class="text-xs font-black uppercase tracking-wider text-orange-500">Prêt à candidater ?</div>
+      <h2 class="mt-3 text-2xl font-extrabold">Rejoignez l'aventure OROGNA.</h2>
+      <p class="mt-3 text-sm leading-6 text-slate-500">CV et lettre de motivation en quelques étapes.</p>
+      <a class="btn-primary mt-7 w-full justify-center" href="{{ route('apply',$jobOffer) }}">Postuler à cette offre ↗</a>
+    </aside>
+  </div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org/",
+  "@@type": "JobPosting",
+  "title": "{{ e($jobOffer->title) }}",
+  "description": "{{ e($jobOffer->description) }}",
+  "identifier": {
+    "@@type": "PropertyValue",
+    "name": "OROGNA Consulting",
+    "value": "{{ e($jobOffer->reference) }}"
+  },
+  "datePosted": "{{ optional($jobOffer->published_at)->toDateString() ?? date('Y-m-d') }}",
+  "validThrough": "{{ optional($jobOffer->deadline)->toDateString() ?? date('Y-m-d', strtotime('+3 months')) }}",
+  "employmentType": "{{ e($jobOffer->contract_type) }}",
+  "hiringOrganization": {
+    "@@type": "Organization",
+    "name": "OROGNA Consulting",
+    "sameAs": "{{ url('/') }}"
+  },
+  "jobLocation": {
+    "@@type": "Place",
+    "address": {
+      "@@type": "PostalAddress",
+      "addressLocality": "{{ e($jobOffer->location ?? 'Ouagadougou') }}",
+      "addressCountry": "BF"
+    }
+  }
+}
+</script>
 @endsection

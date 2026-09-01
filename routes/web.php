@@ -42,6 +42,7 @@ Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/postuler/{jobOffer?}', [ApplicationController::class, 'create'])->name('apply');
 Route::post('/postuler', [ApplicationController::class, 'store'])->name('apply.store');
+Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
 // Candidate Space Routes
 Route::middleware(['auth', 'candidate'])->prefix('mon-espace')->name('candidate.')->group(function () {

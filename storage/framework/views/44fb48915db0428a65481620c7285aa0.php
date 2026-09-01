@@ -3,14 +3,55 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?php echo $__env->yieldContent('title', 'OROGNA Consulting'); ?></title>
-<meta name="description" content="<?php echo e(\App\Models\SiteSetting::value('tagline','Conseil, talents, formation et transformation.')); ?>">
+<title><?php echo $__env->yieldContent('title', 'OROGNA Consulting — Conseil, Talents, Formation & Transformation'); ?></title>
+<meta name="description" content="<?php echo $__env->yieldContent('meta_description', \App\Models\SiteSetting::value('tagline','Conseil, talents, formation et transformation.')); ?>">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="canonical" href="<?php echo e(url()->current()); ?>">
+
+<!-- Open Graph / Social Media -->
+<meta property="og:locale" content="fr_FR">
+<meta property="og:type" content="website">
+<meta property="og:title" content="<?php echo $__env->yieldContent('title', 'OROGNA Consulting — Conseil, Talents, Formation & Transformation'); ?>">
+<meta property="og:description" content="<?php echo $__env->yieldContent('meta_description', \App\Models\SiteSetting::value('tagline','Conseil, talents, formation et transformation.')); ?>">
+<meta property="og:url" content="<?php echo e(url()->current()); ?>">
+<meta property="og:site_name" content="OROGNA Consulting">
+<meta property="og:image" content="<?php echo e(asset(\App\Models\SiteSetting::value('hero_image', 'images/team-orogna.jpg'))); ?>">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<?php echo $__env->yieldContent('title', 'OROGNA Consulting'); ?>">
+<meta name="twitter:description" content="<?php echo $__env->yieldContent('meta_description', \App\Models\SiteSetting::value('tagline','Conseil, talents, formation et transformation.')); ?>">
+<meta name="twitter:image" content="<?php echo e(asset(\App\Models\SiteSetting::value('hero_image', 'images/team-orogna.jpg'))); ?>">
+
 <link rel="icon" href="<?php echo e(asset(\App\Models\SiteSetting::value('favicon','images/logo-orogna-crop.png'))); ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css','resources/js/app.js']); ?>
 <link rel="stylesheet" href="<?php echo e(asset('css/orogna.css')); ?>">
+
+<!-- Schema.org Organization Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "OROGNA Consulting",
+  "url": "<?php echo e(url('/')); ?>",
+  "logo": "<?php echo e(asset(\App\Models\SiteSetting::value('logo','images/logo-orogna.png'))); ?>",
+  "image": "<?php echo e(asset(\App\Models\SiteSetting::value('hero_image','images/team-orogna.jpg'))); ?>",
+  "description": "<?php echo e(\App\Models\SiteSetting::value('tagline','Conseil, talents, formation et transformation.')); ?>",
+  "telephone": "<?php echo e(\App\Models\SiteSetting::value('phone','+226 25 45 62 45')); ?>",
+  "email": "<?php echo e(\App\Models\SiteSetting::value('email','contact@orognaconsulting.com')); ?>",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Ouagadougou",
+    "addressCountry": "BF"
+  },
+  "sameAs": [
+    "<?php echo e(\App\Models\SiteSetting::value('facebook_url','https://www.facebook.com/search/top?q=OROGNA%20Consulting')); ?>"
+  ]
+}
+</script>
 </head>
 <body>
 <?php echo $__env->make('components.site-header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
